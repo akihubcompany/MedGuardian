@@ -1,15 +1,28 @@
-function emergencyCheck(text){
+async function analyze(){
 
-let emergency=["意識がない","呼吸できない","激しい胸痛"]
+let input =
+document.getElementById("symptom").value;
 
-for(let e of emergency){
+let result =
+await aiDiagnosis(input);
 
-if(text.includes(e)){
-
-alert("緊急症状の可能性があります。119に連絡してください。")
-
-}
+showResult(result);
 
 }
+
+function showResult(list){
+
+let html="";
+
+list.forEach(r=>{
+
+html +=
+"<h3>"+r.disease.name+"</h3>"+
+"危険度:"+r.disease.danger+"<br>"+
+"対処:"+r.disease.treatment+"<br><br>";
+
+});
+
+document.getElementById("result").innerHTML = html;
 
 }
