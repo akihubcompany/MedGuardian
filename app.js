@@ -1,35 +1,28 @@
 async function analyze(){
 
-let input=document.getElementById("symptom").value;
+let text = document.getElementById("symptom").value;
 
-if(input===""){
+if(text === ""){
 alert("症状を書いてください");
 return;
 }
 
-let result=await aiDiagnosis(input);
+let result = await aiDiagnosis(text);
 
-if(result.length===0){
+if(result.length === 0){
 return;
 }
 
-showResult(result);
+let html = "";
+
+for(let r of result){
+
+html += "<h3>"+r.disease.name+"</h3>";
+html += "危険度: "+r.disease.danger+"<br>";
+html += "対処: "+r.disease.treatment+"<br><br>";
 
 }
 
-function showResult(list){
-
-let html="";
-
-list.forEach(r=>{
-
-html+=
-"<h3>"+r.disease.name+"</h3>"+
-"危険度:"+r.disease.danger+"<br>"+
-"対処:"+r.disease.treatment+"<br><br>";
-
-});
-
-document.getElementById("result").innerHTML=html;
+document.getElementById("result").innerHTML = html;
 
 }
