@@ -9,6 +9,10 @@ return;
 
 let result=await aiDiagnosis(input);
 
+if(result.length===0){
+return;
+}
+
 showResult(result);
 
 }
