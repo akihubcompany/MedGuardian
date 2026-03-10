@@ -1,8 +1,11 @@
 let model;
+let modelLoaded=false;
 
 async function loadAI(){
 
 model = await use.load();
+
+modelLoaded=true;
 
 console.log("AI model loaded");
 
@@ -17,6 +20,14 @@ return tf.losses.cosineDistance(a,b,0).dataSync()[0];
 }
 
 async function aiDiagnosis(input){
+
+if(!modelLoaded){
+
+alert("AIを読み込み中です。少し待ってください。");
+
+return [];
+
+}
 
 let inputEmbedding = await model.embed([input]);
 
