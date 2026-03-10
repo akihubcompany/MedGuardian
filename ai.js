@@ -1,55 +1,46 @@
 let model;
-let modelLoaded=false;
+let ready = false;
 
 async function loadAI(){
 
 model = await use.load();
 
-modelLoaded=true;
+ready = true;
 
-console.log("AI model loaded");
+console.log("AI loaded");
 
 }
 
 loadAI();
 
-function cosineSimilarity(a,b){
+async function aiDiagnosis(text){
 
-return tf.losses.cosineDistance(a,b,0).dataSync()[0];
-
-}
-
-async function aiDiagnosis(input){
-
-if(!modelLoaded){
-
-alert("AIを読み込み中です。少し待ってください。");
-
+if(!ready){
+alert("AI読み込み中です。10秒ほど待ってください");
 return [];
-
 }
 
-let inputEmbedding = await model.embed([input]);
+let input = await model.embed([text]);
 
-let results=[];
+let results = [];
 
 for(let d of diseases){
 
-let text=d.symptoms.join(" ");
+let sentence = d.symptoms.join(" ");
 
-let emb=await model.embed([text]);
+let emb = await model.embed([sentence]);
 
-let similarity=cosineSimilarity(inputEmbedding,emb);
+let score = tf.losses.cosineDistance(input,emb,0).dataSync()[0];
 
 results.push({
 disease:d,
-score:similarity
+score:score
 });
 
 }
 
 results.sort((a,b)=>a.score-b.score);
 
-return results.slice(0,5);
+return results.slice(0,3);
 
 }
